@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Patient Dashboard - HealConnect</title>
+  <meta name="description" content="Patient Dashboard for HealConnect Healthcare Management System" />
+  <link rel="stylesheet" href="styles.css">
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+</head>
+
+<body>
+  <header>
+    <div class="logo">
+      <h1>HealConnect</h1>
+    </div>
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="patient-dashboard.html" class="active">Dashboard</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="#" id="logout">Logout</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section class="dashboard-container">
+      <div class="dashboard-header">
+        <h2>Patient Dashboard</h2>
+        <p>Welcome, <span id="userName">Patient</span>!</p>
+      </div>
+
+      <div class="dashboard-content">
+        <div class="dashboard-section">
+          <h3>Report Health Issue</h3>
+          <form id="issueForm" class="dashboard-form">
+            <div class="form-group">
+              <label for="issueTitle">Title</label>
+              <input type="text" id="issueTitle" name="issueTitle" placeholder="e.g., Severe Headache" required>
+            </div>
+            <div class="form-group">
+              <label for="symptoms">Main Symptoms</label>
+              <input type="text" id="symptoms" name="symptoms" placeholder="e.g., Headache, Fever, Nausea" required>
+            </div>
+            <div class="form-group">
+              <label for="duration">Duration</label>
+              <input type="text" id="duration" name="duration" placeholder="e.g., 3 days" required>
+            </div>
+            <div class="form-group">
+              <label for="issueDescription">Detailed Description</label>
+              <textarea id="issueDescription" name="issueDescription" rows="5" placeholder="Describe your health issue in detail..." required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">Submit Health Issue</button>
+          </form>
+        </div>
+
+        <div class="dashboard-section">
+          <h3>Your Health Issues</h3>
+          <div id="issuesList" class="issues-list">
+            <div class="loading">Loading your health issues...</div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>HealConnect</h3>
+        <p>Connecting healthcare professionals with patients for better care.</p>
+      </div>
+      <div class="footer-section">
+        <h3>Quick Links</h3>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="patient-dashboard.html">Dashboard</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h3>Contact Us</h3>
+        <p>Email: info@healconnect.com</p>
+        <p>Phone: +1 (123) 456-7890</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 HealConnect. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="scripts/firebase-config.js"></script>
+  <script src="scripts/auth.js"></script>
+  <script src="scripts/patient.js"></script>
+</body>
+</html>

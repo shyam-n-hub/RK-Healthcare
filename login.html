@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login - HealConnect</title>
+  <meta name="description" content="Login to HealConnect Healthcare Management System" />
+  <link rel="stylesheet" href="styles.css">
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+</head>
+
+<body>
+  <header>
+    <div class="logo">
+      <h1>HealConnect</h1>
+    </div>
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="login.html" class="active">Login</a></li>
+        <li><a href="signup.html">Signup</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section class="auth-container">
+      <div class="auth-form">
+        <h2>Login to Your Account</h2>
+        <div class="role-selector">
+          <input type="radio" id="patient" name="role" value="patient" checked>
+          <label for="patient">Patient</label>
+          <input type="radio" id="doctor" name="role" value="doctor">
+          <label for="doctor">Doctor</label>
+        </div>
+        <form id="loginForm">
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required>
+          </div>
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" required>
+          </div>
+          <button type="submit" class="btn btn-primary btn-block">Login</button>
+        </form>
+        <div class="auth-links">
+          <p>Don't have an account? <a href="signup.html">Sign up here</a></p>
+        </div>
+        <div id="error-message" class="error-message"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>HealConnect</h3>
+        <p>Connecting healthcare professionals with patients for better care.</p>
+      </div>
+      <div class="footer-section">
+        <h3>Quick Links</h3>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="login.html">Login</a></li>
+          <li><a href="signup.html">Signup</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h3>Contact Us</h3>
+        <p>Email: info@healconnect.com</p>
+        <p>Phone: +1 (123) 456-7890</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 HealConnect. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="scripts/firebase-config.js"></script>
+  <script src="scripts/auth.js"></script>
+</body>
+</html>

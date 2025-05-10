@@ -1,0 +1,120 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HealConnect - Healthcare Management System</title>
+    <meta name="description" content="Hospital Healthcare Management System" />
+    <link rel="stylesheet" href="styles.css">
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    <!-- IMPORTANT: DO NOT REMOVE THIS SCRIPT TAG OR THIS VERY COMMENT! -->
+    <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
+  </head>
+
+  <body>
+    <header>
+      <div class="logo">
+        <h1>HealConnect</h1>
+      </div>
+      <nav>
+        <ul>
+          <li><a href="index.html" class="active">Home</a></li>
+          <li><a href="login.html">Login</a></li>
+          <li><a href="signup.html">Signup</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="hero-content">
+          <h2>Modern Healthcare Management System</h2>
+          <p>Connecting patients and doctors for better healthcare services</p>
+          <div class="hero-buttons">
+            <a href="signup.html" class="btn btn-primary">Get Started</a>
+            <a href="#features" class="btn btn-secondary">Learn More</a>
+          </div>
+        </div>
+        <div class="hero-image">
+          <img src="https://placehold.co/600x400/9b87f5/FFF?text=Healthcare" alt="Healthcare illustration">
+        </div>
+      </section>
+
+      <section id="features" class="features">
+        <h2>Our Features</h2>
+        <div class="feature-cards">
+          <div class="feature-card">
+            <div class="feature-icon">👨‍⚕️</div>
+            <h3>Doctor-Patient Communication</h3>
+            <p>Direct communication between doctors and patients through our secure platform.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">📋</div>
+            <h3>Digital Records</h3>
+            <p>Maintain all your health records in one secure digital location.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">💊</div>
+            <h3>Online Prescriptions</h3>
+            <p>Receive prescriptions directly from your doctor through the platform.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="how-it-works">
+        <h2>How It Works</h2>
+        <div class="steps">
+          <div class="step">
+            <div class="step-number">1</div>
+            <h3>Sign Up</h3>
+            <p>Create an account as a patient or doctor.</p>
+          </div>
+          <div class="step">
+            <div class="step-number">2</div>
+            <h3>Report Issue</h3>
+            <p>Patients can report health issues through the dashboard.</p>
+          </div>
+          <div class="step">
+            <div class="step-number">3</div>
+            <h3>Get Response</h3>
+            <p>Doctors review issues and provide responses with prescriptions.</p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="footer-content">
+        <div class="footer-section">
+          <h3>HealConnect</h3>
+          <p>Connecting healthcare professionals with patients for better care.</p>
+        </div>
+        <div class="footer-section">
+          <h3>Quick Links</h3>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="login.html">Login</a></li>
+            <li><a href="signup.html">Signup</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h3>Contact Us</h3>
+          <p>Email: info@healconnect.com</p>
+          <p>Phone: +1 (123) 456-7890</p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2025 HealConnect. All rights reserved.</p>
+      </div>
+    </footer>
+
+    <script src="scripts/firebase-config.js"></script>
+    <script src="scripts/main.js"></script>
+  </body>
+</html>
