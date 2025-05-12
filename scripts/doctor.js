@@ -6,31 +6,40 @@ document.addEventListener('DOMContentLoaded', () => {
       database.ref('users/' + user.uid).once('value')
         .then((snapshot) => {
           const userData = snapshot.val();
-          if (userData) {
-            if (userData.role !== 'doctor') {
-              // Redirect to appropriate dashboard if not a doctor
-              window.location.href = userData.role === 'patient' ? 'patient-dashboard.html' : 'index.html';
-              return;
-            }
-            
-            // Update user name on the dashboard
-            const userNameElement = document.getElementById('userName');
-            if (userNameElement) {
-              userNameElement.textContent = userData.name || user.email;
-            }
-            
-            // Update navigation for logged in doctor
-            updateNavigation(true, 'doctor');
-            
-            // Load patient issues
-            loadPatientIssues('all');
+          if (!userData) {
+            console.error("No user data found");
+            window.location.href = 'login.html';
+            return;
           }
+          
+          if (userData.role !== 'doctor') {
+            // Redirect to appropriate dashboard if not a doctor
+            console.log("User is not a doctor, redirecting...");
+            window.location.href = userData.role === 'patient' ? 'patient-dashboard.html' : 'index.html';
+            return;
+          }
+          
+          console.log("Doctor authenticated successfully");
+          
+          // Update user name on the dashboard
+          const userNameElement = document.getElementById('userName');
+          if (userNameElement) {
+            userNameElement.textContent = userData.name || user.email;
+          }
+          
+          // Update navigation for logged in doctor
+          updateNavigation(true, 'doctor');
+          
+          // Load patient issues
+          loadPatientIssues('all');
         })
         .catch((error) => {
           console.error("Error getting user data:", error);
+          alert("Error loading doctor data. Please try again later.");
         });
     } else {
       // User is not signed in, redirect to login
+      console.log("No user signed in, redirecting to login");
       window.location.href = 'login.html';
     }
   });
@@ -45,8 +54,11 @@ document.addEventListener('DOMContentLoaded', () => {
   let currentIssues = {};
   
   // Load all patient issues
-  function loadPatientIssues(filterType = 'all') {
+  window.loadPatientIssues = function(filterType = 'all') {
     if (!patientIssuesList) return;
+    
+    // Show loading message
+    patientIssuesList.innerHTML = '<div class="loading">Loading patient issues...</div>';
     
     const issuesRef = database.ref('issues');
     
@@ -64,15 +76,21 @@ document.addEventListener('DOMContentLoaded', () => {
       const issues = snapshot.val();
       let issueCount = 0;
       
-      Object.keys(issues).reverse().forEach((key) => {
-        const issue = issues[key];
-        
+      // Convert to array and reverse for newest first
+      const issueItems = Object.keys(issues).map(key => {
+        return { key: key, ...issues[key] };
+      });
+      
+      // Sort by timestamp (newest first)
+      issueItems.sort((a, b) => b.timestamp - a.timestamp);
+      
+      issueItems.forEach((issue) => {
         // Apply filter
         if (filterType === 'pending' && issue.status !== 'pending') return;
         if (filterType === 'responded' && issue.status !== 'responded') return;
         
         issueCount++;
-        currentIssues[key] = issue;
+        currentIssues[issue.key] = issue;
         
         const date = new Date(issue.timestamp);
         const formattedDate = date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
@@ -119,7 +137,7 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
               // Add respond button for pending issues
               cardContent += `
-                <button class="btn btn-primary respond-btn" data-issue-id="${key}">
+                <button class="btn btn-primary respond-btn" data-issue-id="${issue.key}">
                   Respond to Patient
                 </button>
               `;
@@ -132,7 +150,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const respondBtn = issueCard.querySelector('.respond-btn');
             if (respondBtn) {
               respondBtn.addEventListener('click', () => {
-                showResponseForm(key, issue);
+                showResponseForm(issue.key, issue);
               });
             }
           })
@@ -148,7 +166,7 @@ document.addEventListener('DOMContentLoaded', () => {
       console.error("Error loading issues:", error);
       patientIssuesList.innerHTML = '<div class="error">Error loading patient issues. Please refresh the page.</div>';
     });
-  }
+  };
   
   // Show the response form for a specific issue
   function showResponseForm(issueId, issue) {
@@ -195,6 +213,16 @@ document.addEventListener('DOMContentLoaded', () => {
       const prescription = document.getElementById('prescription').value;
       const advice = document.getElementById('advice').value;
       
+      if (!issueId || !patientId) {
+        alert("Issue information is missing. Please try again.");
+        return;
+      }
+      
+      if (!diagnosis || !prescription) {
+        alert("Please provide both diagnosis and prescription.");
+        return;
+      }
+      
       const responseData = {
         diagnosis: diagnosis,
         prescription: prescription,
@@ -205,8 +233,8 @@ document.addEventListener('DOMContentLoaded', () => {
       
       // Update issue in database
       const updates = {};
-      updates[`/issues/${issueId}/response`] = responseData;
-      updates[`/issues/${issueId}/status`] = 'responded';
+      updates[`issues/${issueId}/response`] = responseData;
+      updates[`issues/${issueId}/status`] = 'responded';
       
       database.ref().update(updates)
         .then(() => {
@@ -234,23 +262,6 @@ document.addEventListener('DOMContentLoaded', () => {
     cancelResponseButton.addEventListener('click', () => {
       responseForm.reset();
       issueResponseForm.classList.add('hidden');
-    });
-  }
-  
-  // Handle logout functionality
-  const logoutButton = document.getElementById('logout');
-  if (logoutButton) {
-    logoutButton.addEventListener('click', (e) => {
-      e.preventDefault();
-      
-      // Confirmation dialog
-      if (confirm("Are you sure you want to logout?")) {
-        auth.signOut().then(() => {
-          window.location.href = 'index.html';
-        }).catch((error) => {
-          console.error("Error signing out:", error);
-        });
-      }
     });
   }
 });

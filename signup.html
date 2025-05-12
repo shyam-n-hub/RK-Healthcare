@@ -3,9 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sign Up - HealConnect</title>
-  <meta name="description" content="Sign Up for HealConnect Healthcare Management System" />
+  <title>Sign Up - RK Healthcare</title>
+  <meta name="description" content="Sign Up for RK Healthcare Management System" />
   <link rel="stylesheet" href="styles.css">
+      <link rel="icon" href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS5dEUzHw7XMy4FVVmLFVVsUz5c5WhwyITEVQ&s">
+
   <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
@@ -15,7 +17,7 @@
 <body>
   <header>
     <div class="logo">
-      <h1>HealConnect</h1>
+      <h1>RK Healthcare</h1>
     </div>
     <nav>
       <ul>
@@ -67,7 +69,7 @@
   <footer>
     <div class="footer-content">
       <div class="footer-section">
-        <h3>HealConnect</h3>
+        <h3>RK Healthcare</h3>
         <p>Connecting healthcare professionals with patients for better care.</p>
       </div>
       <div class="footer-section">
@@ -81,16 +83,116 @@
       </div>
       <div class="footer-section">
         <h3>Contact Us</h3>
-        <p>Email: info@healconnect.com</p>
-        <p>Phone: +1 (123) 456-7890</p>
+        <p>Email: rkarthigashri@gmail.com</p>
+        <p>Phone: +91 7639222868</p>
       </div>
     </div>
     <div class="footer-bottom">
-      <p>&copy; 2025 HealConnect. All rights reserved.</p>
+      <p>&copy; 2025 RK Healthcare. All rights reserved.</p>
     </div>
   </footer>
 
   <script src="scripts/firebase-config.js"></script>
-  <script src="scripts/auth.js"></script>
+  <script>
+    // Wait for Firebase to initialize
+    document.addEventListener('DOMContentLoaded', () => {
+      // Signup form processing
+      const signupForm = document.getElementById('signupForm');
+      if (signupForm) {
+        signupForm.addEventListener('submit', (e) => {
+          e.preventDefault();
+          
+          const name = document.getElementById('name').value;
+          const email = document.getElementById('email').value;
+          const password = document.getElementById('password').value;
+          const confirmPassword = document.getElementById('confirmPassword').value;
+          const role = document.querySelector('input[name="role"]:checked').value;
+          const errorMessage = document.getElementById('error-message');
+          
+          // Clear previous error messages
+          errorMessage.textContent = "";
+          
+          // Validate form inputs
+          if (!name || !email || !password || !confirmPassword) {
+            errorMessage.textContent = "Please fill in all fields.";
+            return;
+          }
+          
+          // Validate password
+          if (password !== confirmPassword) {
+            errorMessage.textContent = "Passwords do not match. Please try again.";
+            return;
+          }
+          
+          // Validate password strength (minimum 6 characters)
+          if (password.length < 6) {
+            errorMessage.textContent = "Password must be at least 6 characters long.";
+            return;
+          }
+          
+          // Disable submit button to prevent multiple submissions
+          const submitButton = signupForm.querySelector('button[type="submit"]');
+          if (submitButton) {
+            submitButton.disabled = true;
+            submitButton.textContent = 'Creating account...';
+          }
+          
+          // Create user
+          auth.createUserWithEmailAndPassword(email, password)
+            .then((userCredential) => {
+              // Successfully created user
+              const user = userCredential.user;
+              console.log("User created successfully:", user.uid);
+              
+              // Store user data in database
+              const userData = {
+                name: name,
+                email: email,
+                role: role,
+                createdAt: Date.now()
+              };
+              
+              console.log("Storing user data for UID:", user.uid, userData);
+              
+              // Return the promise from database operation to chain properly
+              return database.ref('users/' + user.uid).set(userData);
+            })
+            .then(() => {
+              console.log("User data stored successfully");
+              
+              // Get the role to redirect to appropriate dashboard
+              const role = document.querySelector('input[name="role"]:checked').value;
+              
+              // Redirect based on role
+              if (role === 'patient') {
+                window.location.href = 'patient-dashboard.html';
+              } else if (role === 'doctor') {
+                window.location.href = 'doctor-dashboard.html';
+              }
+            })
+            .catch((error) => {
+              console.error("Signup error:", error);
+              
+              // Re-enable submit button
+              if (submitButton) {
+                submitButton.disabled = false;
+                submitButton.textContent = 'Sign Up';
+              }
+              
+              // Handle specific error messages
+              if (error.code === 'auth/email-already-in-use') {
+                errorMessage.textContent = "This email is already registered. Please use a different email or login.";
+              } else if (error.code === 'auth/invalid-email') {
+                errorMessage.textContent = "Invalid email format. Please provide a valid email.";
+              } else if (error.code === 'auth/weak-password') {
+                errorMessage.textContent = "Password is too weak. Please use a stronger password.";
+              } else {
+                errorMessage.textContent = "Error creating account: " + error.message;
+              }
+            });
+        });
+      }
+    });
+  </script>
 </body>
 </html>
